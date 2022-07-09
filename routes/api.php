@@ -14,6 +14,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Auth Route
+
+Route::post('/login', [App\Http\Controllers\AuthController::class, 'login']);
+Route::post('/register', [App\Http\Controllers\AuthController::class, 'register']);
+
+
+// Middleware Auth
+Route::middleware(['auth:sanctum'])->group(function () {
+
+    //  Logout
+    Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout']); 
+
+    // Get /user
+    Route::get('/user', function (Request $request) {
+        
+        return response()->json([
+            'success'   => true,
+            'message'   => 'Data Berhasil di Ambil !',
+            'data'      => $request->user()
+        ], 200);
+
+    });
+
 });
